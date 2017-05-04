@@ -5,8 +5,12 @@ from .models import Game
 from .serializers import GameSerializer
 from .permissions import IsAdminOrReadOnly
  
- 
 class GameList(generics.ListCreateAPIView):
+    queryset = Game.objects.all()
+    serializer_class = GameSerializer
+    permission_classes = (IsAdminOrReadOnly, )
+
+class GameDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Game.objects.all()
     serializer_class = GameSerializer
     permission_classes = (IsAdminOrReadOnly, )
