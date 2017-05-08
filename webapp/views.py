@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from .forms import LoginForm, RegisterForm
-from django.contrib.auth import authenticate, login as auth_login, logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django import forms
 from django.contrib import messages
@@ -13,7 +13,7 @@ class HomePageView(TemplateView):
 # Logout View
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect('/login')
 
 # Login Function
 def login_view(request):
@@ -28,7 +28,7 @@ def login_view(request):
             if form.is_valid():
                 user = authenticate(request, username=form.cleaned_data['username'], password=form.cleaned_data['password'])
                 if user is not None:
-                    auth_login(request, user)
+                    login(request, user)
                     # Store session data
                     request.session['username'] = form.cleaned_data['username']
                     return HttpResponseRedirect('/app')
@@ -63,7 +63,7 @@ def signup_view(request):
             # Register user and login
             else:
                 user = User.objects.create_user(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
-                auth_login(request, user)
+                login(request, user)
                 # Store session data
                 request.session['username'] = form.cleaned_data['username']
                 return HttpResponseRedirect('/app')   
