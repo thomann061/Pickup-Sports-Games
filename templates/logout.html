@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Logout{% endblock %}
+  {% block pagecontent %}
+  {% if user.is_authenticated %}
+    <p>Hello {{request.session.username}}. You are logged in.</p>
+    <a href="{% url 'logout' %}">Logout</a>
+  {% endif %}
+
+  {% endblock %}

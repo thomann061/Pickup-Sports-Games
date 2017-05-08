@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+  {% block pagecontent %}
+
+    <form action="{% url 'login' %}" method="post" class="form-signin">
+      {% include 'includes/messages.html' %}
+    <h2 class="form-signin-heading">Sign In</h2>
+    {% csrf_token %}
+    {{ form }}
+
+    <input class="form-button btn btn-secondary" type="submit" value="Submit" />
+    <p class="form-snippet"><a href="{% url 'signup' %}">New User? Sign up</a></p>
+    </form>
+
+  {% endblock %}

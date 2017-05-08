@@ -1,0 +1,7 @@
+.dropdown-menu {
+    padding-left: 10px;
+}
+
+.dropdown-menu > li > a {
+    color: #222;
+}
