@@ -43,6 +43,19 @@ $.ajax({
                         position: results[0].geometry.location,
                         title: element['venue']
                     });
+                    var infoWindow = new google.maps.InfoWindow({
+                        content: 
+                            '<div id="info-window">' + 
+                            '<p>Type: ' + element['gameType'] + '</p>' +
+                            '<p>Venue: ' + element['gameVenue'] + '</p>' +
+                            '<p>Address: ' + element['gameAddress'] + ', ' + element['gameCity'] + ', ' + element['gameState']
+                            + element['gameZip'] +'</p>'
+                            + '<p>Date/Time: ' + element['gameDateTime'] + '</p>'
+                            + '</div'
+                    });
+                    marker.addListener('click', function() {
+                        infoWindow.open(map, marker);
+                    });
                     marker.setAnimation(google.maps.Animation.DROP);
                     marker.setMap(map);
                 } else {
