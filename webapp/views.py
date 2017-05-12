@@ -37,7 +37,9 @@ def login_view(request):
                 else:
                     # Add error message
                     messages.add_message(request, messages.ERROR, 'Try again.')
-                    return HttpResponseRedirect('/login')     
+                    return render(request, 'login.html', {'form': form})
+            else:
+                return render(request, 'login.html', {'form': form})   
         # if a GET (or any other method) we'll create a blank form
         else:
             form = LoginForm()
@@ -55,17 +57,17 @@ def signup_view(request):
         form = RegisterForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
+            # check if user exists
+            if User.objects.filter(username=form.cleaned_data['username']).exists():
+                # Add error message
+                messages.add_message(request, messages.ERROR, 'User already exists.')
+                return render(request, 'signup.html', {'form': form})
             password1 = form.cleaned_data['password']
             password2 = form.cleaned_data['passwordVerify']
             if password1 != password2:
                 # Add error message
                 messages.add_message(request, messages.ERROR, 'Your passwords don''t match.')
-                return HttpResponseRedirect('/signup')
-            # check if user exists
-            if User.objects.filter(username=form.cleaned_data['username']).exists():
-                # Add error message
-                messages.add_message(request, messages.ERROR, 'User already exists.')
-                return HttpResponseRedirect('/signup')
+                return render(request, 'signup.html', {'form': form})
             # Register user and login
             else:
                 user = User.objects.create_user(username=form.cleaned_data['username'], password=form.cleaned_data['password'], 
@@ -74,7 +76,9 @@ def signup_view(request):
                 login(request, user)
                 # Store session data
                 storeSessionData(request, user)
-                return HttpResponseRedirect('/map')   
+                return HttpResponseRedirect('/map')
+        else:
+            return render(request, 'signup.html', {'form': form})  
     # if a GET (or any other method) we'll create a blank form
     else:
         form = RegisterForm()
@@ -104,7 +108,7 @@ def game_view(request):
     else:
         return HttpResponseRedirect('/login')
 
-# Game View
+# New Game View
 def new_game_view(request):
     # Check if user is logged in
     if request.user.is_authenticated():
