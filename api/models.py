@@ -2,9 +2,12 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Game(models.Model):
-    gameName = models.CharField(max_length=255)
-    gameType = models.CharField(max_length=255)
-    gameLocation = models.CharField(max_length=255)
+    gameType = models.CharField(max_length=50, default="Basketball")
+    gameVenue = models.CharField(max_length=100, default="A Fake Park")
+    gameAddress = models.CharField(max_length=100, default="Fake Address")
+    gameCity = models.CharField(max_length=50, default="Jersey City")
+    gameState = models.CharField(max_length=2, default="NJ")
+    gameZip = models.CharField(max_length=20, default="07302")
     gameDateTime = models.DateTimeField()
 
     # To string

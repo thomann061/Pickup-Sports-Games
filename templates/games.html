@@ -5,8 +5,8 @@
     <table class="table profile">
   <thead>
     <tr>
-      <th>Name</th>
       <th>Type</th>
+      <th>Venue</th>
       <th>Location</th>
       <th>Date, Time</th>
     </tr>
@@ -14,9 +14,9 @@
   <tbody>
     {% for gameuser in games_list %}
     <tr>
-      <td>{{ gameuser.game.gameName }}</td>
       <td>{{ gameuser.game.gameType }}</td>
-      <td>{{ gameuser.game.gameLocation }}</td>
+      <td>{{ gameuser.game.gameVenue }}</td>
+      <td>{{ gameuser.game.gameAddress }}, {{ gameuser.game.gameCity }}, {{ gameuser.game.gameState }} {{ gameuser.game.gameZip }}</td>
       <td>{{ gameuser.game.gameDateTime }}</td>
     </tr>
     {% endfor %}

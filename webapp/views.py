@@ -118,8 +118,10 @@ def new_game_view(request):
             form = GameForm(request.POST)
             # check whether it's valid:
             if form.is_valid():
-                game = Game.objects.create(gameName=form.cleaned_data['gameName'], gameType=form.cleaned_data['gameType'],
-                                    gameLocation=form.cleaned_data['gameLocation'], gameDateTime=form.cleaned_data['gameDateTime'])
+                game = Game.objects.create(gameType=form.cleaned_data['gameType'], gameVenue=form.cleaned_data['gameVenue'],
+                                    gameAddress=form.cleaned_data['gameAddress'], gameCity=form.cleaned_data['gameCity'],
+                                    gameState=form.cleaned_data['gameState'], gameZip=form.cleaned_data['gameZip'],
+                                    gameDateTime=form.cleaned_data['gameDateTime'])
                 GameUser.objects.create(game=game, user=request.user)
                 return HttpResponseRedirect('/games')
             else:
