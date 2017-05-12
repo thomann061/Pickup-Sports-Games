@@ -5,3 +5,15 @@
 .dropdown-menu > li > a {
     color: #222;
 }
+
+.profile {
+    text-align: left;
+    background-color: #fff;
+    padding: 40px;
+    color: #222;
+}
+
+#map {
+    height: 400px;
+    width: 100%;
+}

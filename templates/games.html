@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Games{% endblock %}
+  {% block pagecontent %}
+      <h2 class="form-signin-heading">My Games</h2>
+    <table class="table profile">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Location</th>
+      <th>Date, Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for gameuser in games_list %}
+    <tr>
+      <td>{{ gameuser.game.gameName }}</td>
+      <td>{{ gameuser.game.gameType }}</td>
+      <td>{{ gameuser.game.gameLocation }}</td>
+      <td>{{ gameuser.game.gameDateTime }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{% url 'new-game' %}">
+<input id="new-game-click" type="submit" value="New Game" class="btn btn-success">
+</a>
+  {% endblock %}

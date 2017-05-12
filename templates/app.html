@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
-{% block title %}Homepage{% endblock %}
-  {% block pagecontent %}
-  {% if user.is_authenticated %}
-    <p>Hello and welcome, {{request.session.username}}</p>
-    <h1>This is where the app will go!!!</h1>
-    <h4>Ermagerd!!!!</h4>
-  {% endif %}
-  {% endblock %}
