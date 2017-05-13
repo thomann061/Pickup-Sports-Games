@@ -27,9 +27,6 @@ if (navigator.geolocation) {
 // Get the games
 $.ajax({
     url: '/api/games/',
-    headers: {
-        'Authorization':'Token 56bbce9618738bd13a832a77ad0a894a389c1151'
-    },
     method: 'GET',
     dataType: 'json',
     success: function(data) {
