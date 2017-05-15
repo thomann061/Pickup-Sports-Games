@@ -1,23 +1,26 @@
 {% extends 'base.html' %}
-{% block title %}Login{% endblock %}
+{% block title %}Profile{% endblock %}
   {% block pagecontent %}
 
     {% include 'includes/messages.html' %}
-
-    <h2 class="form-signin-heading">Profile</h2>
-    <table class="table table-hover profile">
-        <tr>
-            <th>First Name</th>
-            <td>{{ user.first_name }}</td>
-        </tr>
-        <tr>
-            <th>Last Name</th>
-            <td>{{ user.last_name }}</td>
-        </tr>
-        <tr>
-            <th>Email</th>
-            <td>{{ user.email }}</td>
-        </tr>       
-    </table>
+    <div class="container">
+        <div class="row row-main">
+            <h5>Profile</h5>
+            <table class="table table-hover profile">
+                <tr>
+                    <th>First Name</th>
+                    <td>{{ user.first_name }}</td>
+                </tr>
+                <tr>
+                    <th>Last Name</th>
+                    <td>{{ user.last_name }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ user.email }}</td>
+                </tr>       
+            </table>
+        </div>
+    </div>
 
   {% endblock %}

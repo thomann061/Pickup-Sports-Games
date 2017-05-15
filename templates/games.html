@@ -2,26 +2,7 @@
 {% block title %}Games{% endblock %}
   {% block pagecontent %}
       <h2 class="form-signin-heading">My Games</h2>
-    <table class="table profile">
-  <thead>
-    <tr>
-      <th>Type</th>
-      <th>Venue</th>
-      <th>Location</th>
-      <th>Date, Time</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for gameuser in games_list %}
-    <tr>
-      <td>{{ gameuser.game.gameType }}</td>
-      <td>{{ gameuser.game.gameVenue }}</td>
-      <td>{{ gameuser.game.gameAddress }}, {{ gameuser.game.gameCity }}, {{ gameuser.game.gameState }} {{ gameuser.game.gameZip }}</td>
-      <td>{{ gameuser.game.gameDateTime }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    
 <a href="{% url 'new-game' %}">
 <input id="new-game-click" type="submit" value="New Game" class="btn btn-success">
 </a>

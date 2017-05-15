@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from .forms import LoginForm, RegisterForm, GameForm
 from django.contrib.auth import authenticate, login, logout
@@ -8,8 +7,20 @@ from django import forms
 from api.models import Game, GameUser
 from django.contrib import messages
 
-class HomePageView(TemplateView):
-    template_name = "index.html"
+def home_view(request):
+    # Check if user is logged in
+    if request.user.is_authenticated():
+        # if this is a POST request we need to process the form data
+        if request.method == 'POST':
+            return HttpResponseRedirect('/map')
+        # if a GET (or any other method) we'll create a blank form
+        else:
+            # Get last 10 results
+            gameUsers = GameUser.objects.all()[:10]
+            return render(request, 'index.html', {"games_list": gameUsers})
+    # Redirect to login page if user is not logged in
+    else:
+        return HttpResponseRedirect('/login')
 
 # Logout View
 def logout_view(request):
@@ -33,7 +44,7 @@ def login_view(request):
                     # Store session data
                     storeSessionData(request, user)
                     # Redirect to application
-                    return HttpResponseRedirect('/map')
+                    return HttpResponseRedirect('/')
                 else:
                     # Add error message
                     messages.add_message(request, messages.ERROR, 'Try again.')

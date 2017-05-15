@@ -1,12 +1,14 @@
+html, body {
+    background-color: rgb(245, 248, 250);
+    height: 100%;
+    width: 100%;
+}
+
 .dropdown-menu {
     padding-left: 10px;
 }
 
-.dropdown-menu > li > a {
-    color: #222;
-}
-
-.profile {
+.table-profile {
     text-align: left;
     background-color: #fff;
     padding: 40px;
@@ -20,4 +22,91 @@
 
 #info-window {
     color: #222;
+}
+
+.row-main {
+    padding: 40px;
+    margin: 20px;
+    background-color: #fff;
+    display: block;
+    border: 1px solid #eee;
+}
+
+.row-profile-home {
+    text-align: center;
+    padding-top: 10px;
+}
+
+.row-profile-home-image {
+    overflow: hidden;
+    padding: 0px;
+    margin-bottom: -20px;
+    height: 150px;
+    border: none;
+}
+
+.row-profile-home-image > img {
+    width: 100%;
+}
+
+.row-profile-snippet {
+    max-width: 200px;
+    margin: auto;
+    font-size: 12px;
+}
+
+.profile-icon {
+    font-size: 5em;
+    max-width: 100px;
+    margin-top: -70px;
+    margin-bottom: 5px;
+    box-shadow: rgba(0, 0, 0, 0.0980392) 0px 1px 1px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgb(255, 255, 255);
+    border-image: initial;
+    border-radius: 100%;
+    background-color: #eee;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+  text-align: left;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 20px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.form-box {
+  margin-bottom: 10px;
+}
+
+.form-button {
+  margin-top: 10px;
+}
+
+.form-snippet {
+  margin-top: 10px;
+}
+
+.container-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: inherit;
+    height: inherit;
 }

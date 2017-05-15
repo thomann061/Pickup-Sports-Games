@@ -1,17 +1,15 @@
 {% if user.is_authenticated %}
-    <div class="dropdown">
+    <div class="dropdown navbar-nav">
   <a class="nav-link active dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     {{request.session.first_name}}
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="{% url 'map' %}">Map</a></li>
-    <li><a href="{% url 'games' %}">Games</a></li>
-    <li><a href="{% url 'feed' %}">Feed</a></li>
-    <li><a href="{% url 'profile' %}">Profile</a></li>
     <li><a href="{% url 'logout' %}">Sign out</a></li>
   </ul>
 </div>
 {% else %}
+<div class="dropdown navbar-nav">
     <a class="nav-link active" href="{% url 'login' %}">Sign In</a>
+    </div>
 {% endif %}

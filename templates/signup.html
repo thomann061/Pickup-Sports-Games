@@ -1,5 +1,5 @@
-{% extends 'base.html' %}
-{% block title %}Login{% endblock %}
+{% extends 'base-login.html' %}
+{% block title %}Sign Up{% endblock %}
   {% block pagecontent %}
     <form action="{% url 'signup' %}" method="post" class="form-signin">
         {% include 'includes/messages.html' %}
