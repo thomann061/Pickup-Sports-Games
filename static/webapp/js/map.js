@@ -5,12 +5,6 @@
 var map, infoWindow, games;
 function initMap() {
 
-map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: -34.397, lng: 150.644},
-    zoom: 12
-});
-infoWindow = new google.maps.InfoWindow;
-
 // Try HTML5 geolocation.
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -19,49 +13,54 @@ if (navigator.geolocation) {
         lng: position.coords.longitude
     };
 
-    map.setCenter(pos);
-    }, function() {
-    handleLocationError(true, infoWindow, map.getCenter());
-});
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: pos,
+        zoom: 12
+    });
+    infoWindow = new google.maps.InfoWindow;
 
-// Get the games
-$.ajax({
-    url: '/api/games/',
-    method: 'GET',
-    dataType: 'json',
-    success: function(data) {
-        var geocoder = new google.maps.Geocoder();
-        data.forEach(function(element) {
-            var address = element['gameAddress'] + ', ' + element['gameCity'] + ', ' + element['gameState']
-                            + element['gameZip']; 
-            geocoder.geocode( {'address': address}, function(results, status) {
-                if(status == 'OK') {
-                    var marker = new google.maps.Marker({
-                        position: results[0].geometry.location,
-                        title: element['venue']
-                    });
-                    var infoWindow = new google.maps.InfoWindow({
-                        content: 
-                            '<div id="info-window">' + 
-                            '<p>Type: ' + element['gameType'] + '</p>' +
-                            '<p>Venue: ' + element['gameVenue'] + '</p>' +
-                            '<p>Address: ' + element['gameAddress'] + ', ' + element['gameCity'] + ', ' + element['gameState']
-                            + element['gameZip'] +'</p>'
-                            + '<p>Date/Time: ' + element['gameDateTime'] + '</p>'
-                            + '</div'
-                    });
-                    marker.addListener('click', function() {
-                        infoWindow.open(map, marker);
-                    });
-                    marker.setAnimation(google.maps.Animation.DROP);
-                    marker.setMap(map);
-                } else {
-                    // geocoding did not work, handle later
-                }
+    // Get the games
+    $.ajax({
+        url: '/api/games/',
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            var geocoder = new google.maps.Geocoder();
+            data.forEach(function(element) {
+                var address = element['gameAddress'] + ', ' + element['gameCity'] + ', ' + element['gameState']
+                                + element['gameZip']; 
+                geocoder.geocode( {'address': address}, function(results, status) {
+                    if(status == 'OK') {
+                        var marker = new google.maps.Marker({
+                            position: results[0].geometry.location,
+                            title: element['venue']
+                        });
+                        var infoWindow = new google.maps.InfoWindow({
+                            content: 
+                                '<div id="info-window">' + 
+                                '<p>Type: ' + element['gameType'] + '</p>' +
+                                '<p>Venue: ' + element['gameVenue'] + '</p>' +
+                                '<p>Address: ' + element['gameAddress'] + ', ' + element['gameCity'] + ', ' + element['gameState']
+                                + element['gameZip'] +'</p>'
+                                + '<p>Date/Time: ' + element['gameDateTime'] + '</p>'
+                                + '</div'
+                        });
+                        marker.addListener('click', function() {
+                            infoWindow.open(map, marker);
+                        });
+                        marker.setAnimation(google.maps.Animation.DROP);
+                        marker.setMap(map);
+                    } else {
+                        // geocoding did not work, handle later
+                    }
+                });
             });
-        });
-    }
-  });
+        }
+    });
+
+    }, function() {
+        handleLocationError(true, infoWindow, map.getCenter());
+    });
 
 } else {
     // Browser doesn't support Geolocation

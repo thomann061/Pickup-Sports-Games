@@ -142,7 +142,9 @@ def feed_view(request):
             return HttpResponseRedirect('/feed')
         # if a GET (or any other method) we'll create a blank form
         else:
-            return render(request, 'feed.html')
+            # Get last 10 results
+            gameUsers = GameUser.objects.all()[:10]
+            return render(request, 'feed.html', {"games_list": gameUsers})
     # Redirect to login page if user is not logged in
     else:
         return HttpResponseRedirect('/login')

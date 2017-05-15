@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
-{% block title %}App{% endblock %}
+{% block title %}Feed{% endblock %}
   {% block pagecontent %}
-      
+    <h2 class="form-signin-heading">Feed</h2>
+    {% for gameuser in games_list %}
+      <p>{{ gameuser.user.first_name }} created a {{ gameuser.game.gameType }} game @ {{ gameuser.game.gameVenue }}.</p>
+    {% endfor %}
+    
   {% endblock %}
