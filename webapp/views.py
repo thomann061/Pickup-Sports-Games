@@ -15,9 +15,11 @@ def home_view(request):
             return HttpResponseRedirect('/map')
         # if a GET (or any other method) we'll create a blank form
         else:
-            # Get last 10 results
-            gameUsers = GameUser.objects.all()[:10]
-            return render(request, 'index.html', {"games_list": gameUsers})
+            # Get GameUser Objects for My Games
+            myGames = GameUser.objects.filter(user=request.user)
+            # Get GameUser Objects for Activity - last 10 results
+            feedGames = GameUser.objects.all()[:10]
+            return render(request, 'index.html', {"feed_games": feedGames, "my_games": myGames})
     # Redirect to login page if user is not logged in
     else:
         return HttpResponseRedirect('/login')
@@ -30,7 +32,7 @@ def logout_view(request):
 # Login Function
 def login_view(request):
     if request.user.is_authenticated():
-        return render(request, 'logout.html')
+        return HttpResponseRedirect('/')
     else:
         # if this is a POST request we need to process the form data
         if request.method == 'POST':
@@ -113,7 +115,7 @@ def map_view(request):
 def game_view(request):
     # Check if user is logged in
     if request.user.is_authenticated():
-        gameUsers = GameUser.objects.filter(user=request.user)
+        gameUsers = GameUser.objects.filter(user=request.user, isOrganizer=1)
         return render(request, 'games.html', {"games_list": gameUsers})
     # Redirect to login page if user is not logged in
     else:
@@ -133,8 +135,8 @@ def new_game_view(request):
                                     gameAddress=form.cleaned_data['gameAddress'], gameCity=form.cleaned_data['gameCity'],
                                     gameState=form.cleaned_data['gameState'], gameZip=form.cleaned_data['gameZip'],
                                     gameDateTime=form.cleaned_data['gameDateTime'])
-                GameUser.objects.create(game=game, user=request.user)
-                return HttpResponseRedirect('/games')
+                GameUser.objects.create(game=game, user=request.user, isOrganizer=1)
+                return HttpResponseRedirect('/')
             else:
                 return render(request, 'new-game.html', {"form": form})
         else:
@@ -156,6 +158,23 @@ def feed_view(request):
             # Get last 10 results
             gameUsers = GameUser.objects.all()[:10]
             return render(request, 'feed.html', {"games_list": gameUsers})
+    # Redirect to login page if user is not logged in
+    else:
+        return HttpResponseRedirect('/login')
+
+# Join Game View
+def join_game_view(request):
+    # Check if user is logged in
+    if request.user.is_authenticated():
+        # if this is a POST request we need to process the form data
+        if request.method == 'POST':
+            id = request.POST['gameId']
+            game = Game.objects.get(id=id)
+            try:
+                gameUser = GameUser.objects.get(game=game, user=request.user)
+            except GameUser.DoesNotExist:
+                GameUser.objects.create(game=game, user=request.user, isOrganizer=0)
+        return HttpResponseRedirect('/')
     # Redirect to login page if user is not logged in
     else:
         return HttpResponseRedirect('/login')

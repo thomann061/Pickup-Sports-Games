@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
-{% block title %}Logout{% endblock %}
-  {% block pagecontent %}
-  {% if user.is_authenticated %}
-    <p>Hello {{request.session.username}}. You are signed in.</p>
-    <a class="btn btn-success" href="{% url 'logout' %}">Sign Out</a>
-  {% endif %}
-
-  {% endblock %}

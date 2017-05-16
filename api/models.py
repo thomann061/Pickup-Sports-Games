@@ -17,6 +17,7 @@ class Game(models.Model):
 class GameUser(models.Model):
     game = models.ForeignKey(Game)
     user = models.ForeignKey(User)
+    isOrganizer = models.BooleanField(default=0)
 
     # To string
     def __str__(self):

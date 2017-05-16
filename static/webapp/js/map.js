@@ -33,17 +33,17 @@ if (navigator.geolocation) {
                     if(status == 'OK') {
                         var marker = new google.maps.Marker({
                             position: results[0].geometry.location,
-                            title: element['venue']
+                            title: element['gameVenue']
                         });
+
                         var infoWindow = new google.maps.InfoWindow({
                             content: 
-                                '<div id="info-window">' + 
-                                '<p>Type: ' + element['gameType'] + '</p>' +
-                                '<p>Venue: ' + element['gameVenue'] + '</p>' +
-                                '<p>Address: ' + element['gameAddress'] + ', ' + element['gameCity'] + ', ' + element['gameState']
-                                + element['gameZip'] +'</p>'
-                                + '<p>Date/Time: ' + element['gameDateTime'] + '</p>'
-                                + '</div'
+                                'Type: ' + element['gameType'] + '<br>' +
+                                'Venue: ' + element['gameVenue'] + '<br>' +
+                                'Address: ' + element['gameAddress'] + ', ' + element['gameCity'] + ', ' + element['gameState']
+                                + element['gameZip'] +'<br>'
+                                + 'Date/Time: ' + element['gameDateTime'] + '<br>'
+                                + '<input type="button" id="' + element['id'] + '" value="Join Game" class="join-game btn btn-success">'
                         });
                         marker.addListener('click', function() {
                             infoWindow.open(map, marker);
@@ -66,6 +66,31 @@ if (navigator.geolocation) {
     // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
 }
+
+// Add ajax call to join-game button
+$(document).on('click', '.join-game', function() {
+    var id = $(this).attr('id');
+    $.ajax({
+        headers: { "X-CSRFToken": getCookie('csrftoken') },
+        url: '/join-game',
+        method: 'POST',
+        dataType: 'json',
+        data: {'gameId': id},
+        success: function(data) {
+            
+        },
+        error: function(data) {
+            console.log(data);
+        }
+    });
+});
+
+function getCookie(name) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -75,3 +100,5 @@ infoWindow.setContent(browserHasGeolocation ?
                         'Error: Your browser doesn\'t support geolocation.');
 infoWindow.open(map);
 }
+
+

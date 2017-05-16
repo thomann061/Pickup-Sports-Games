@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}New Game{% endblock %}
   {% block pagecontent %}
+  <div class="container">
+    <div class="row row-main">
 <form action="{% url 'new-game' %}" method="POST" class="form-signin">
     {% include 'includes/messages.html' %}
 <h2 class="form-signin-heading">New Game</h2>
@@ -9,4 +11,6 @@
 
 <input class="form-button btn btn-success" type="submit" value="New Game" />
 </form>
+    </div>
+  </div>
   {% endblock %}
