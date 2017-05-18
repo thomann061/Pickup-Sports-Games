@@ -1,25 +1,21 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from .forms import LoginForm, RegisterForm, GameForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django import forms
 from api.models import Game, GameUser
 from django.contrib import messages
+from django.core import serializers
 
 def home_view(request):
     # Check if user is logged in
     if request.user.is_authenticated():
-        # if this is a POST request we need to process the form data
-        if request.method == 'POST':
-            return HttpResponseRedirect('/map')
-        # if a GET (or any other method) we'll create a blank form
-        else:
-            # Get GameUser Objects for My Games
-            myGames = GameUser.objects.filter(user=request.user)
-            # Get GameUser Objects for Activity - last 10 results
-            feedGames = GameUser.objects.all()[:10]
-            return render(request, 'index.html', {"feed_games": feedGames, "my_games": myGames})
+        # Get GameUser Objects for My Games
+        myGames = GameUser.objects.filter(user=request.user)
+        # Get GameUser Objects for Activity - last 10 results
+        feedGames = GameUser.objects.all().order_by('-id')[:10]
+        return render(request, 'index.html', {"feed_games": feedGames, "my_games": myGames})
     # Redirect to login page if user is not logged in
     else:
         return HttpResponseRedirect('/login')
@@ -89,7 +85,7 @@ def signup_view(request):
                 login(request, user)
                 # Store session data
                 storeSessionData(request, user)
-                return HttpResponseRedirect('/map')
+                return HttpResponseRedirect('/')
         else:
             return render(request, 'signup.html', {'form': form})  
     # if a GET (or any other method) we'll create a blank form
@@ -121,6 +117,7 @@ def game_view(request):
     else:
         return HttpResponseRedirect('/login')
 
+
 # New Game View
 def new_game_view(request):
     # Check if user is logged in
@@ -134,8 +131,8 @@ def new_game_view(request):
                 game = Game.objects.create(gameType=form.cleaned_data['gameType'], gameVenue=form.cleaned_data['gameVenue'],
                                     gameAddress=form.cleaned_data['gameAddress'], gameCity=form.cleaned_data['gameCity'],
                                     gameState=form.cleaned_data['gameState'], gameZip=form.cleaned_data['gameZip'],
-                                    gameDateTime=form.cleaned_data['gameDateTime'])
-                GameUser.objects.create(game=game, user=request.user, isOrganizer=1)
+                                    gameDateTime=form.cleaned_data['gameDateTime'], gameOrganizer=request.user)
+                GameUser.objects.create(game=game, user=request.user)
                 return HttpResponseRedirect('/')
             else:
                 return render(request, 'new-game.html', {"form": form})
@@ -172,9 +169,45 @@ def join_game_view(request):
             game = Game.objects.get(id=id)
             try:
                 gameUser = GameUser.objects.get(game=game, user=request.user)
+                message = 'You already are a member of this game.'
+                status = 'error'
             except GameUser.DoesNotExist:
-                GameUser.objects.create(game=game, user=request.user, isOrganizer=0)
-        return HttpResponseRedirect('/')
+                GameUser.objects.create(game=game, user=request.user)
+                message = 'You joined this game.'
+                status = 'success'
+        return JsonResponse({ 'message': message, 'status': status })
+    # Redirect to login page if user is not logged in
+    else:
+        return HttpResponseRedirect('/login')
+
+# Delete Game View
+def delete_game_view(request):
+    # Check if user is logged in
+    if request.user.is_authenticated():
+        # if this is a POST request we need to process the form data
+        if request.method == 'POST':
+            id = request.POST['gameId']
+            try:
+                game = Game.objects.get(id=id)
+                try:
+                    gameUser = GameUser.objects.get(game=game, user=request.user)
+                    # If you are the organizer, delete the game
+                    if gameUser.isOrganizer:
+                        game.delete()
+                        message = 'You have deleted this game.'
+                        status = 'success'
+                    # If you are the player, unjoin the game
+                    else:
+                        gameUser.delete()
+                        message = 'You have left this game.'
+                        status = 'success'
+                except GameUser.DoesNotExist:
+                    message = 'You left this game already.'
+                    status = 'error'
+            except Game.DoesNotExist:
+                message = 'This game does not exist anymore.'
+                status = 'error'
+        return JsonResponse({ 'message': message, 'status': status })
     # Redirect to login page if user is not logged in
     else:
         return HttpResponseRedirect('/login')

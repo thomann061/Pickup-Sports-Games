@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^games$', views.game_view, name="games"),
     url(r'^new-game$', views.new_game_view, name="new-game"),
     url(r'^join-game$', views.join_game_view, name="join-game"),
+    url(r'^delete-game$', views.delete_game_view, name="delete-game"),
     url(r'^feed$', views.feed_view, name="feed"),
     url(r'^map$', views.map_view, name="map")
 ]

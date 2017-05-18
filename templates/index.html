@@ -2,6 +2,8 @@
 {% block title %}Homepage{% endblock %}
   {% block pagecontent %}
   <div class="container">
+    <!--<pre data-bind="text: ko.toJSON($data, null, 2)"></pre>-->
+    {% csrf_token %}
     <div class="row row-main row-profile-home-image">
       <img src="http://lorempixel.com/output/nightlife-q-c-640-480-5.jpg">
     </div>
@@ -22,49 +24,40 @@
       <h5>Activity</h5>
         {% for gameuser in feed_games %}
           {% if gameuser.isOrganizer %}
-            <p>{{ gameuser.user.first_name }} {{ gameuser.user.last_name }} started a {{ gameuser.game.gameType }} game @ {{ gameuser.game.gameVenue }}.</p>
+            <p>{{ gameuser.user.first_name }} {{ gameuser.user.last_name }} started a {{ gameuser.game.gameType }} game @{{ gameuser.game.gameVenue }}.</p>
           {% else %}
-            <p>{{ gameuser.user.first_name }} {{ gameuser.user.last_name }} joined a {{ gameuser.game.gameType }} game @ {{ gameuser.game.gameVenue }}.</p>
+            <p>{{ gameuser.user.first_name }} {{ gameuser.user.last_name }} joined a {{ gameuser.game.gameType }} game @{{ gameuser.game.gameVenue }}.</p>
           {% endif %}
         {% endfor %}
     </div>
     <div class="row row-main">
       <h5>Nearby Games</h5>
-      <div id="map"></div>
+      <div id="map" data-bind="googleMap: gameList"></div>
     </div>
+    <div id="gameDetail"></div>
     <div class="row row-main">
-      <div class="row">
-      <h5 class="col">My Games</h5>
-      <form action="{% url 'new-game' %}">
-        <input type="submit" value="New Game" class="btn btn-success">
-      </form>
-      </div>
+      <h5>Game List</h5>
       <table class="table table-hover table-profile">
         <thead>
           <tr>
-            <th>P/O</th>
+            <th>Organizer</th>
             <th>Type</th>
             <th>Venue</th>
             <th>Location</th>
             <th>Date, Time</th>
           </tr>
         </thead>
-        <tbody>
-          {% for gameuser in my_games %}
-          <tr>
-            {% if gameuser.isOrganizer %}
-            <td>Organizer</td>
-            {% else %}
-            <td>Player</td>
-            {% endif %}
-            <td>{{ gameuser.game.gameType }}</td>
-            <td>{{ gameuser.game.gameVenue }}</td>
-            <td>{{ gameuser.game.gameAddress }}, {{ gameuser.game.gameCity }}, {{ gameuser.game.gameState }} {{ gameuser.game.gameZip }}</td>
-            <td>{{ gameuser.game.gameDateTime }}</td>
+        <tbody data-bind="foreach: gameList">
+          <tr id="tr-game-list">
+            <td><span data-bind="text: gameOrganizer"></span></td>
+            <td><span data-bind="text: gameType"></span></td>
+            <td><span data-bind="text: gameVenue"></span></td>
+            <td><span data-bind="text: gameLocation"></span></td>
+            <td><span data-bind="text: gameDateTime"></span></td>
           </tr>
-          {% endfor %}
         </tbody>
       </table>
     </div>
+    <div id="newGameDetail"></div>
   </div>
   {% endblock %}

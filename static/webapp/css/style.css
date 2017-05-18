@@ -20,6 +20,19 @@ html, body {
     width: 100%;
 }
 
+#message-wrapper {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    color: #fff;
+    z-index: 999;
+    text-align: center;
+}
+
+#message {
+    padding: 5px 10px;
+}
+
 .row-main {
     padding: 40px;
     margin: 20px;
@@ -67,6 +80,7 @@ html, body {
 
 .form-signin {
   max-width: 330px;
+  width: 330px;
   padding: 15px;
   margin: 0 auto;
   text-align: left;
@@ -105,4 +119,14 @@ html, body {
     align-items: center;
     width: inherit;
     height: inherit;
+}
+
+#gameDetail span {
+    display: block;
+}
+
+.button-join-game, .button-new-game, .button-save-game {
+    width: 125px;
+    max-width: 125px;
+    margin-top: -15px;
 }
